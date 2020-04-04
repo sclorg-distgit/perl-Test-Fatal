@@ -13,7 +13,7 @@
 Summary:	Incredibly simple helpers for testing code with exceptions 
 Name:		%{?scl_prefix}perl-Test-Fatal
 Version:	0.014
-Release:	15%{?dist}
+Release:	16%{?dist}
 License:	GPL+ or Artistic
 Url:		https://metacpan.org/release/Test-Fatal
 Source0:	https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Fatal-%{version}.tar.gz
@@ -21,6 +21,7 @@ BuildArch:	noarch
 # Module Build
 BuildRequires:	%{?scl_prefix}perl-interpreter
 BuildRequires:	%{?scl_prefix}perl-generators
+BuildRequires:	%{?scl_prefix}perl(Config)
 BuildRequires:	%{?scl_prefix}perl(ExtUtils::MakeMaker)
 # Module Runtime
 BuildRequires:	%{?scl_prefix}perl(Carp)
@@ -56,6 +57,7 @@ with about the same amount of typing.
 
 # Avoid doc-file dependencies
 chmod -c -x examples/*
+%{?scl:scl enable %{scl} '}perl -MConfig -i -pe %{?scl:'"}'%{?scl:"'}s{^#!/usr/bin/perl}{$Config{startperl}}%{?scl:'"}'%{?scl:"'} examples/*%{?scl:'}
 
 %build
 %{?scl:scl enable %{scl} '}perl Makefile.PL INSTALLDIRS=vendor && make %{?_smp_mflags}%{?scl:'}
@@ -78,6 +80,9 @@ make test TEST_FILES="$(echo $(find xt/ -name '*.t'))"
 %{_mandir}/man3/Test::Fatal.3*
 
 %changelog
+* Tue Mar 17 2020 Petr Pisar <ppisar@redhat.com> - 0.014-16
+- Normalize shebangs in a documentation (bug #1813316)
+
 * Fri Jan 03 2020 Jitka Plesnikova <jplesnik@redhat.com> - 0.014-15
 - SCL
 
